@@ -27,10 +27,10 @@ def get_raw_name(path):
     return raw_path
 
 def get_video_new_name(full_path):
+    if full_path.find('@') != -1:
+        return full_path
     modify_time = os.path.getmtime(full_path)
     date = convert_timestamp_to_date(modify_time)
-    if full_path.find(date) != -1:
-        return full_path
     dir, base_name = os.path.split(full_path)
     name, ext = os.path.splitext(base_name)
     new_path = os.path.join(dir, '{}@{}{}'.format(date, name, ext))
