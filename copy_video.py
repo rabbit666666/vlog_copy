@@ -1,6 +1,7 @@
 import ctypes
 import os
 import shutil
+import platform
 
 import argcomplete
 from gooey import Gooey, GooeyParser
@@ -56,7 +57,8 @@ def check_copy(src, dst):
     program_name='OsmoCopy[OsmoPocket拷贝工具]',
 )
 def main():
-    ctypes.windll.shcore.SetProcessDpiAwareness(2)
+    if platform.platform() == 'windows':
+        ctypes.windll.shcore.SetProcessDpiAwareness(2)
     parser = GooeyParser(description='')
     parser.add_argument('--src', metavar='源目录', widget='DirChooser', help='源目录, 如大疆SD的目录就是: X:\\DCIM')
     parser.add_argument('--dst', metavar='输出目录', widget='DirChooser',

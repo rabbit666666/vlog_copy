@@ -54,21 +54,21 @@ def is_renamed(full_path):
     return renamed
 
 def get_copy_dst_name(src_folder, dst_folder):
-    min_mt = sys.maxsize
-    max_mt = 0
-    for (root, folders, files) in os.walk(src_folder):
-        for f in files:
-            path = os.path.join(root, f)
-            mt = os.path.getmtime(path)
-            min_mt = min(min_mt, mt)
-            max_mt = max(max_mt, mt)
-    min_date = convert_timestamp_to_date2(min_mt)
-    max_date = convert_timestamp_to_date2(max_mt)
-    date_range = '{}-{}'.format(min_date, max_date)
-    if src_folder.find(date_range) != -1:
+    if src_folder.find('@') != -1:
         base_name = os.path.basename(src_folder)
         new_dst_dir = os.path.join(dst_folder, base_name)
     else:
+        min_mt = sys.maxsize
+        max_mt = 0
+        for (root, folders, files) in os.walk(src_folder):
+            for f in files:
+                path = os.path.join(root, f)
+                mt = os.path.getmtime(path)
+                min_mt = min(min_mt, mt)
+                max_mt = max(max_mt, mt)
+        min_date = convert_timestamp_to_date2(min_mt)
+        max_date = convert_timestamp_to_date2(max_mt)
+        date_range = '{}-{}'.format(min_date, max_date)
         dir_name = '{}@{}'.format(date_range, src_folder.split(os.sep)[-1])
         new_dst_dir = os.path.join(dst_folder, dir_name)
     return new_dst_dir
