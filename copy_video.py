@@ -9,6 +9,12 @@ from gooey import Gooey, GooeyParser
 import util
 from verify import verify
 
+is_windows = platform.system().lower() == 'windows'
+if is_windows:
+    default_win_size = (1500, 1000)
+else:
+    default_win_size = (750, 500)
+
 def copy_files(src_folder, dst_folder):
     total = 0
     for (root, folders, files) in os.walk(src_folder):
@@ -51,13 +57,13 @@ def check_copy(src, dst):
     print('checking complete, everything is ok.')
 
 @Gooey(
-    default_size=(1500, 1000),
+    default_size=default_win_size,
     required_cols=1,
     optional_cols=1,
     program_name='OsmoCopy[OsmoPocket拷贝工具]',
 )
 def main():
-    if platform.platform() == 'windows':
+    if is_windows:
         ctypes.windll.shcore.SetProcessDpiAwareness(2)
     parser = GooeyParser(description='')
     parser.add_argument('--src', metavar='源目录', widget='DirChooser', help='源目录, 如大疆SD的目录就是: X:\\DCIM')
@@ -76,11 +82,6 @@ def main():
     if not os.path.exists(args.src):
         print('source path:{} does not exist.'.format(args.dst))
         exit(1)
-
-    # if args.copy is None:
-    #     print('please set action, copy or check?')
-    #     parser.print_usage()
-    #     exit(1)
 
     print('{} -> {}'.format(args.src, args.dst))
     args.dst = util.get_copy_dst_name(args.src, args.dst)
