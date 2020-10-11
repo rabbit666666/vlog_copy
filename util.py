@@ -48,10 +48,7 @@ def get_file_digest(path):
     return digest
 
 def is_renamed(full_path):
-    modify_time = os.path.getmtime(full_path)
-    date = convert_timestamp_to_date(modify_time)
-    renamed =  full_path.find(date) != -1
-    return renamed
+    return full_path.find('@') != -1
 
 def get_copy_dst_name(src_folder, dst_folder):
     if src_folder.find('@') != -1:
